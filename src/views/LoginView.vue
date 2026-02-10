@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <h1 class="login-title">🎯 DateCourse</h1>
+      <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
       <h2>로그인</h2>
       
       <form @submit.prevent="handleLogin" class="login-form">
@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '../stores/auth'
+
 export default {
   name: 'LoginView',
   data() {
@@ -54,15 +56,41 @@ export default {
     }
   },
   methods: {
-    handleLogin() {
-      if (this.form.username && this.form.password) {
-        // TODO: 백엔드와 연동
-        console.log('로그인 시도:', this.form);
-        this.errorMessage = '';
-        // 임시로 홈으로 이동
-        this.$router.push('/');
-      } else {
+    async handleLogin() {
+      this.errorMessage = '';
+      if (!this.form.username || !this.form.password) {
         this.errorMessage = '아이디와 비밀번호를 입력해주세요.';
+        return;
+      }
+
+      try {
+        const res = await fetch('/v1/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            loginId: this.form.username,
+            password: this.form.password
+          })
+        });
+
+        const data = await res.json();
+
+        if (data && data.result === 'SUCCESS') {
+          const auth = useAuthStore()
+          auth.setLogin(data.data)
+          this.errorMessage = '';
+          this.$router.push('/home-auth');
+        } else if (data && data.result === 'FAIL') {
+          const msg = data.error && data.error.message ? data.error.message : '로그인에 실패했습니다.';
+          this.errorMessage = msg;
+        } else {
+          this.errorMessage = '서버 응답을 처리할 수 없습니다.';
+        }
+      } catch (err) {
+        console.error('로그인 오류', err);
+        this.errorMessage = '서버 연결에 실패했습니다.';
       }
     }
   }
@@ -70,6 +98,17 @@ export default {
 </script>
 
 <style scoped>
+/* 링크 특유의 색상과 밑줄을 제거 */
+.logo {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit;       /* 부모 요소(h1)의 색상을 그대로 상속 */
+  display: inline-block; /* 클릭 영역 확보 */
+}
+
+/* 마우스를 올렸을 때도 색상이 변하지 않게 하려면 */
+.logo:hover {
+  color: inherit;
+}
 * {
   margin: 0;
   padding: 0;

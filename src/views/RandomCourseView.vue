@@ -2,7 +2,7 @@
   <div class="random-course-container">
     <header class="header">
       <nav class="navbar">
-        <h1 class="logo">🎯 DateCourse</h1>
+        <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
         <div class="nav-links">
           <router-link to="/" class="nav-btn">홈</router-link>
           <router-link to="/login" class="nav-btn logout-btn">로그아웃</router-link>
@@ -31,7 +31,7 @@
             :disabled="isSpinning"
             class="spin-btn"
           >
-            {{ isSpinning ? '뽑는 중...' : '🎲 새로운 코스 뽑기' }}
+            {{ isSpinning ? '뽑는 중...' : '🎲 새로운 랜덤 지하철역 뽑기' }}
           </button>
         </div>
       </div>
@@ -193,29 +193,55 @@ export default {
     }
   },
   methods: {
-    generateRandomCourse() {
+    async generateRandomCourse() {
       this.isSpinning = true;
-      
-      // 회전 애니메이션
+
+      // 회전 애니메이션(클라이언트 표시용)
       let spins = 0;
       const spinInterval = setInterval(() => {
         const randomCourse = this.courses[Math.floor(Math.random() * this.courses.length)];
         this.currentCourse = randomCourse;
         spins++;
-        
-        if (spins > 15) {
+        if (spins > 12) {
           clearInterval(spinInterval);
-          this.isSpinning = false;
-          
-          // 선택된 코스를 히스토리에 추가 (중복 제거)
+        }
+      }, 80);
+
+      try {
+        const res = await fetch('http://localhost:8080/v1/random/subway');
+        const body = await res.json();
+
+        // 서버 응답을 기다려 애니메이션이 끝나도록 약간 대기
+        await new Promise(r => setTimeout(r, 700));
+
+        if (body && body.result === 'SUCCESS') {
+          const station = body.data || '알 수 없는 역';
+          // 서버에서 받은 역명을 현재 카드에 표시
+          this.currentCourse = {
+            icon: '🚇',
+            name: station,
+            location: station,
+            description: '서버에서 추천한 랜덤 지하철역',
+            rating: ''
+          };
+
+          // 히스토리에 추가 (중복 제거)
           if (!this.courseHistory.some(c => c.name === this.currentCourse.name)) {
             this.courseHistory.unshift({ ...this.currentCourse });
-            if (this.courseHistory.length > 5) {
-              this.courseHistory.pop();
-            }
+            if (this.courseHistory.length > 5) this.courseHistory.pop();
           }
+        } else if (body && body.result === 'FAIL') {
+          const msg = body.error && body.error.message ? body.error.message : '추천을 불러오지 못했습니다.';
+          alert(msg);
+        } else {
+          alert('서버 응답이 올바르지 않습니다.');
         }
-      }, 100);
+      } catch (err) {
+        console.error('랜덤 지하철역 호출 오류', err);
+        alert('서버 연결에 실패했습니다.');
+      } finally {
+        this.isSpinning = false;
+      }
     },
     saveCourse(course) {
       alert(`"${course.name}"을 저장했습니다!`);
@@ -230,6 +256,17 @@ export default {
 </script>
 
 <style scoped>
+/* 링크 특유의 색상과 밑줄을 제거 */
+.logo {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit;       /* 부모 요소(h1)의 색상을 그대로 상속 */
+  display: inline-block; /* 클릭 영역 확보 */
+}
+
+/* 마우스를 올렸을 때도 색상이 변하지 않게 하려면 */
+.logo:hover {
+  color: inherit;
+}
 .random-course-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #f8f9fa;

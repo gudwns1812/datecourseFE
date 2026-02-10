@@ -2,7 +2,7 @@
   <div class="home-container">
     <header class="header">
       <nav class="navbar">
-        <h1 class="logo">🎯 DateCourse</h1>
+        <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
         <div class="nav-links">
           <router-link to="/login" class="nav-btn login-btn">로그인</router-link>
           <router-link to="/register" class="nav-btn signup-btn">회원가입</router-link>
@@ -82,6 +82,17 @@ export default {
 </script>
 
 <style scoped>
+/* 링크 특유의 색상과 밑줄을 제거 */
+.logo {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit;       /* 부모 요소(h1)의 색상을 그대로 상속 */
+  display: inline-block; /* 클릭 영역 확보 */
+}
+
+/* 마우스를 올렸을 때도 색상이 변하지 않게 하려면 */
+.logo:hover {
+  color: inherit;
+}
 * {
   margin: 0;
   padding: 0;
