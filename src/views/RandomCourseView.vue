@@ -17,12 +17,15 @@
 
         <div class="spin-area">
           <div class="course-display" :class="{ spinning: isSpinning }">
-            <div class="course-card">
+           <div class="course-card">
               <div class="course-icon">{{ currentCourse.icon }}</div>
               <h2>{{ currentCourse.name }}</h2>
               <p class="location">📍 {{ currentCourse.location }}</p>
               <p class="description">{{ currentCourse.description }}</p>
-              <div class="rating">⭐ {{ currentCourse.rating }}</div>
+              
+              <div v-if="currentCourse.rating" class="rating">
+                ⭐ {{ currentCourse.rating }}
+              </div>
             </div>
           </div>
 
@@ -77,11 +80,11 @@ export default {
     return {
       isSpinning: false,
       currentCourse: {
-        icon: '🌙',
-        name: '한강 공원 야경 데이트',
-        location: '한강공원',
-        description: '낭만적인 야경과 함께하는 특별한 저녁',
-        rating: '4.8'
+        icon: '❓',
+        name: '어디로 떠나볼까요?',
+        location: '랜덤 추천 대기중...',
+        description: '아래 버튼을 눌러 설레는 데이트 장소를 확인해보세요!',
+        rating: ''  // 처음엔 평점 없음
       },
       nearbyPlaces: [
         {
@@ -194,6 +197,7 @@ export default {
   },
   methods: {
     async generateRandomCourse() {
+      if (this.isSpinning) return;
       this.isSpinning = true;
 
       // 회전 애니메이션(클라이언트 표시용)
@@ -208,21 +212,26 @@ export default {
       }, 80);
 
       try {
-        const res = await fetch('http://localhost:8080/v1/random/subway');
+        const res = await fetch('v1/stations/random');
         const body = await res.json();
 
+        clearInterval(spinInterval);
         // 서버 응답을 기다려 애니메이션이 끝나도록 약간 대기
-        await new Promise(r => setTimeout(r, 700));
+        await new Promise(r => setTimeout(r, 500));
 
         if (body && body.result === 'SUCCESS') {
-          const station = body.data || '알 수 없는 역';
-          // 서버에서 받은 역명을 현재 카드에 표시
+          const data = body.data;
+          
+          // [데이터 매핑 로직 변경]
+          // data.lineNumber는 배열 (예: ["2호선", "신분당선"]) -> 문자열로 변환
+          const lineInfo = data.lineNumbers ? data.lineNumbers.join(' / ') : '';
+
           this.currentCourse = {
             icon: '🚇',
-            name: station,
-            location: station,
-            description: '서버에서 추천한 랜덤 지하철역',
-            rating: ''
+            name: data.stationName,      // 역 이름 (예: 강남)
+            location: lineInfo,          // 몇 호선인지 (예: 2호선 / 신분당선)
+            description: data.stationAddress, // 주소 (예: 서울 강남구...)
+            rating: 'New'                // 평점 (필요시 수정)
           };
 
           // 히스토리에 추가 (중복 제거)
@@ -249,8 +258,6 @@ export default {
     }
   },
   mounted() {
-    // 초기 코스 설정
-    this.currentCourse = this.courses[0];
   }
 }
 </script>
@@ -332,16 +339,24 @@ export default {
   margin-bottom: 0.5rem;
 }
 
+/* 호선 정보 스타일 */
 .location {
   font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 1rem;
+  font-weight: 600; /* 조금 두껍게 */
+  color: #555;      /* 색상 조정 */
+  margin-bottom: 0.5rem; /* 간격 줄임 */
+  display: inline-block;
+  background-color: #f0f2f5;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
 }
 
+/* 주소 스타일 */
 .description {
-  color: #999;
+  color: #888;
   font-size: 0.95rem;
   margin-bottom: 1rem;
+  word-break: keep-all; /* 주소가 길 경우 줄바꿈 예쁘게 */
 }
 
 .rating {
