@@ -98,23 +98,6 @@ export default {
 </script>
 
 <style scoped>
-/* 링크 특유의 색상과 밑줄을 제거 */
-.logo {
-  text-decoration: none; /* 밑줄 제거 */
-  color: inherit;       /* 부모 요소(h1)의 색상을 그대로 상속 */
-  display: inline-block; /* 클릭 영역 확보 */
-}
-
-/* 마우스를 올렸을 때도 색상이 변하지 않게 하려면 */
-.logo:hover {
-  color: inherit;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .login-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -155,32 +138,6 @@ export default {
   gap: 1.5rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-}
-
-.form-group input {
-  padding: 0.8rem;
-  border: 2px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
-}
-
 .login-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -201,16 +158,6 @@ export default {
 
 .login-btn:active {
   transform: translateY(0);
-}
-
-.error-message {
-  background: #fee;
-  color: #c33;
-  padding: 1rem;
-  border-radius: 5px;
-  text-align: center;
-  font-size: 0.9rem;
-  border: 1px solid #fcc;
 }
 
 .login-footer {

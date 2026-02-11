@@ -30,15 +30,16 @@ export const useAuthStore = defineStore('auth', {
       console.log('로그인 완료:', this.isLogin);
     },
     async logout() {
-        try {
+      try {
         await axios.post('/v1/auth/logout'); // 서버 세션 죽이기
-        } finally {
+      } finally {
+        
         // 서버 요청이 성공하든 실패하든 프론트 상태는 초기화
         this.isLogin = false;
         this.username = '';
         // 홈으로 이동 (컴포넌트에서 호출 시 처리해도 됨)
         router.push('/login');
-        }
+      }
     } 
   }
 })

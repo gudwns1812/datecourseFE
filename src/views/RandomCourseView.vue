@@ -256,66 +256,10 @@ export default {
 </script>
 
 <style scoped>
-/* 링크 특유의 색상과 밑줄을 제거 */
-.logo {
-  text-decoration: none; /* 밑줄 제거 */
-  color: inherit;       /* 부모 요소(h1)의 색상을 그대로 상속 */
-  display: inline-block; /* 클릭 영역 확보 */
-}
-
-/* 마우스를 올렸을 때도 색상이 변하지 않게 하려면 */
-.logo:hover {
-  color: inherit;
-}
 .random-course-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #f8f9fa;
   min-height: 100vh;
-}
-
-.header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 1rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: white;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.nav-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  color: white;
-  background: transparent;
-  border: 2px solid white;
-}
-
-.nav-btn:hover {
-  background: white;
-  color: #667eea;
 }
 
 .logout-btn {

@@ -45,31 +45,6 @@ export default {
 </script>
 
 <style scoped>
-/* 링크 특유의 색상과 밑줄을 제거 */
-.logo {
-  text-decoration: none; /* 밑줄 제거 */
-  color: inherit;       /* 부모 요소(h1)의 색상을 그대로 상속 */
-  display: inline-block; /* 클릭 영역 확보 */
-}
-
-/* 마우스를 올렸을 때도 색상이 변하지 않게 하려면 */
-.logo:hover {
-  color: inherit;
-}
-.header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 1rem 0;
-}
-.navbar {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  max-width:1200px;
-  margin:0 auto;
-  padding:0 2rem;
-}
-.logo { color: white; font-weight:700 }
-.nav-btn { background: white; border:none; padding:0.5rem 1rem; border-radius:6px; cursor:pointer }
 .main-content { max-width:900px; margin:3rem auto; padding:1rem; text-align:center }
 .primary { background:#667eea; color:white; padding:0.8rem 1.2rem; border:none; border-radius:6px; cursor:pointer }
 </style>
