@@ -1,38 +1,32 @@
 <template>
   <div class="login-container">
+    <h1 class="app-logo"><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
     <div class="login-box">
-      <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
       <h2>로그인</h2>
       
-      <form @submit.prevent="handleLogin" class="login-form">
-        <div class="form-group">
-          <label for="username">아이디</label>
-          <input
-            type="text"
-            id="username"
-            v-model="form.username"
-            placeholder="아이디를 입력하세요"
-            required
-          />
-        </div>
+      <MessageAlert v-if="errorMessage" :message="errorMessage" type="error" />
 
-        <div class="form-group">
-          <label for="password">비밀번호</label>
-          <input
-            type="password"
-            id="password"
-            v-model="form.password"
-            placeholder="비밀번호를 입력하세요"
-            required
-          />
-        </div>
+      <form @submit.prevent="handleLogin" class="login-form">
+        <FormInput
+          id="username"
+          v-model="form.username"
+          type="text"
+          label="아이디"
+          placeholder="아이디를 입력하세요"
+          required
+        />
+
+        <FormInput
+          id="password"
+          v-model="form.password"
+          type="password"
+          label="비밀번호"
+          placeholder="비밀번호를 입력하세요"
+          required
+        />
 
         <button type="submit" class="login-btn">로그인</button>
       </form>
-
-      <div v-if="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
 
       <div class="login-footer">
         <p>아직 계정이 없으신가요? <router-link to="/register">회원가입</router-link></p>
@@ -43,9 +37,15 @@
 
 <script>
 import { useAuthStore } from '../stores/auth'
+import FormInput from '../components/FormInput.vue'
+import MessageAlert from '../components/MessageAlert.vue'
 
 export default {
   name: 'LoginView',
+  components: {
+    FormInput,
+    MessageAlert
+  },
   data() {
     return {
       form: {
@@ -105,8 +105,26 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  position: relative;
 }
+
+.app-logo {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  margin: 0;
+}
+
+.logo {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 0.8;}
 
 .login-box {
   background: white;

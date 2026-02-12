@@ -12,9 +12,6 @@
   display: inline-block;
 }
 
-.logo:hover {
-  color: inherit;
-}
 
 /* ===== Header & Navbar (공통) ===== */
 .header {
@@ -38,7 +35,6 @@
 .logo {
   font-size: 1.8rem;
   font-weight: bold;
-  color: white;
 }
 
 .nav-links {

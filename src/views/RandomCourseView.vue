@@ -1,14 +1,6 @@
 <template>
   <div class="random-course-container">
-    <header class="header">
-      <nav class="navbar">
-        <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
-        <div class="nav-links">
-          <router-link to="/" class="nav-btn">홈</router-link>
-          <router-link to="/login" class="nav-btn logout-btn">로그아웃</router-link>
-        </div>
-      </nav>
-    </header>
+    <AppHeader />
 
     <section class="random-section">
       <div class="container">
@@ -17,16 +9,13 @@
 
         <div class="spin-area">
           <div class="course-display" :class="{ spinning: isSpinning }">
-           <div class="course-card">
-              <div class="course-icon">{{ currentCourse.icon }}</div>
-              <h2>{{ currentCourse.name }}</h2>
-              <p class="location">📍 {{ currentCourse.location }}</p>
-              <p class="description">{{ currentCourse.description }}</p>
-              
-              <div v-if="currentCourse.rating" class="rating">
-                ⭐ {{ currentCourse.rating }}
-              </div>
-            </div>
+            <CourseCard
+              :icon="currentCourse.icon"
+              :name="currentCourse.name"
+              :location="currentCourse.location"
+              :description="currentCourse.description"
+              :rating="currentCourse.rating"
+            />
           </div>
 
           <button 
@@ -44,14 +33,16 @@
       <div class="container">
         <h2>🎯 주변 추천 장소</h2>
         <div class="nearby-grid">
-          <div v-for="place in nearbyPlaces" :key="place.id" class="place-card">
-            <div class="place-icon">{{ place.icon }}</div>
-            <h3>{{ place.name }}</h3>
-            <p class="place-category">{{ place.category }}</p>
-            <p class="place-distance">{{ place.distance }}</p>
-            <p class="place-description">{{ place.description }}</p>
-            <div class="place-rating">⭐ {{ place.rating }}</div>
-          </div>
+          <PlaceCard
+            v-for="place in nearbyPlaces"
+            :key="place.id"
+            :icon="place.icon"
+            :name="place.name"
+            :category="place.category"
+            :distance="place.distance"
+            :description="place.description"
+            :rating="place.rating"
+          />
         </div>
       </div>
     </section>
@@ -74,8 +65,17 @@
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue'
+import CourseCard from '../components/CourseCard.vue'
+import PlaceCard from '../components/PlaceCard.vue'
+
 export default {
   name: 'RandomCourseView',
+  components: {
+    AppHeader,
+    CourseCard,
+    PlaceCard
+  },
   data() {
     return {
       isSpinning: false,
@@ -269,10 +269,6 @@ export default {
   min-height: 100vh;
 }
 
-.logout-btn {
-  background: rgba(255, 255, 255, 0.2);
-}
-
 .random-section {
   padding: 3rem 2rem;
 }
@@ -318,53 +314,6 @@ export default {
   100% { transform: rotateY(360deg); }
 }
 
-.course-card {
-  background: white;
-  border-radius: 15px;
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  border: 3px solid #667eea;
-}
-
-.course-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  animation: float 3s ease-in-out infinite;
-}
-
-.course-card h2 {
-  font-size: 1.8rem;
-  color: #667eea;
-  margin-bottom: 0.5rem;
-}
-
-/* 호선 정보 스타일 */
-.location {
-  font-size: 1.1rem;
-  font-weight: 600; /* 조금 두껍게 */
-  color: #555;      /* 색상 조정 */
-  margin-bottom: 0.5rem; /* 간격 줄임 */
-  display: inline-block;
-  background-color: #f0f2f5;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-}
-
-/* 주소 스타일 */
-.description {
-  color: #888;
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-  word-break: keep-all; /* 주소가 길 경우 줄바꿈 예쁘게 */
-}
-
-.rating {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #667eea;
-}
-
 .spin-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -404,56 +353,6 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-}
-
-.place-card {
-  background: #f8f9fa;
-  border-radius: 10px;
-  padding: 1.5rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.place-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
-  border-color: #667eea;
-}
-
-.place-icon {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-}
-
-.place-card h3 {
-  font-size: 1.1rem;
-  color: #333;
-  margin-bottom: 0.3rem;
-}
-
-.place-category {
-  font-size: 0.85rem;
-  color: #667eea;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.place-distance {
-  font-size: 0.9rem;
-  color: #999;
-  margin-bottom: 0.5rem;
-}
-
-.place-description {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.place-rating {
-  font-weight: bold;
-  color: #667eea;
 }
 
 .course-history-section {

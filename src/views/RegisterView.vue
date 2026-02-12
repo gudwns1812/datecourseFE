@@ -1,90 +1,74 @@
 <template>
   <div class="register-container">
+    <h1 class="app-logo"><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
     <div class="register-box">
-      <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
       <h2>회원가입</h2>
       
+      <MessageAlert v-if="errorMessage" :message="errorMessage" type="error" />
+      <MessageAlert v-if="successMessage" :message="successMessage" type="success" />
+
       <form @submit.prevent="handleRegister" class="register-form">
-        <div class="form-group">
-          <label for="username">아이디</label>
-          <input
-            type="text"
-            id="username"
-            v-model="form.username"
-            placeholder="아이디를 입력하세요"
-            required
-          />
-          <small v-if="usernameError" class="error-text">{{ usernameError }}</small>
-        </div>
+        <FormInput
+          id="username"
+          v-model="form.username"
+          type="text"
+          label="아이디"
+          placeholder="아이디를 입력하세요"
+          :error="usernameError"
+          required
+        />
 
-        <div class="form-group">
-          <label for="email">이메일</label>
-          <input
-            type="email"
-            id="email"
-            v-model="form.email"
-            placeholder="이메일을 입력하세요"
-            required
-          />
-          <small v-if="emailError" class="error-text">{{ emailError }}</small>
-        </div>
+        <FormInput
+          id="email"
+          v-model="form.email"
+          type="email"
+          label="이메일"
+          placeholder="이메일을 입력하세요"
+          :error="emailError"
+          required
+        />
 
-        <div class="form-group">
-          <label for="password">비밀번호</label>
-          <input
-            type="password"
-            id="password"
-            v-model="form.password"
-            placeholder="비밀번호를 입력하세요 (8자 이상)"
-            required
-            @input="validatePassword"
-          />
-          <small v-if="passwordError" class="error-text">{{ passwordError }}</small>
-        </div>
+        <FormInput
+          id="password"
+          v-model="form.password"
+          type="password"
+          label="비밀번호"
+          placeholder="비밀번호를 입력하세요 (8자 이상)"
+          :error="passwordError"
+          required
+          @blur="validatePassword"
+        />
 
-        <div class="form-group">
-          <label for="passwordConfirm">비밀번호 확인</label>
-          <input
-            type="password"
-            id="passwordConfirm"
-            v-model="form.passwordConfirm"
-            placeholder="비밀번호를 다시 입력하세요"
-            required
-          />
-          <small v-if="passwordConfirmError" class="error-text">{{ passwordConfirmError }}</small>
-        </div>
+        <FormInput
+          id="passwordConfirm"
+          v-model="form.passwordConfirm"
+          type="password"
+          label="비밀번호 확인"
+          placeholder="비밀번호를 다시 입력하세요"
+          :error="passwordConfirmError"
+          required
+          @blur="validatePassword"
+        />
 
-        <div class="form-group">
-          <label for="nickname">닉네임</label>
-          <input
-            type="text"
-            id="nickname"
-            v-model="form.nickname"
-            placeholder="닉네임을 입력하세요"
-            required
-          />
-        </div>
+        <FormInput
+          id="nickname"
+          v-model="form.nickname"
+          type="text"
+          label="닉네임"
+          placeholder="닉네임을 입력하세요"
+          required
+        />
 
-        <div class="form-group checkbox">
-          <input
-            type="checkbox"
-            id="agree"
-            v-model="form.agreeTerms"
-            required
-          />
-          <label for="agree">이용약관 및 개인정보 수집에 동의합니다</label>
-        </div>
+        <FormInput
+          id="agree"
+          v-model="form.agreeTerms"
+          type="checkbox"
+          label="이용약관 및 개인정보 수집에 동의합니다"
+          required
+        />
 
         <button type="submit" class="register-btn" :disabled="!isFormValid">회원가입</button>
       </form>
-
-      <div v-if="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
-
-      <div v-if="successMessage" class="success-message">
-        {{ successMessage }}
-      </div>
 
       <div class="register-footer">
         <p>이미 계정이 있으신가요? <router-link to="/login">로그인</router-link></p>
@@ -94,8 +78,15 @@
 </template>
 
 <script>
+import FormInput from '../components/FormInput.vue'
+import MessageAlert from '../components/MessageAlert.vue'
+
 export default {
   name: 'RegisterView',
+  components: {
+    FormInput,
+    MessageAlert
+  },
   data() {
     return {
       form: {
@@ -191,6 +182,26 @@ export default {
   align-items: center;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+}
+
+.app-logo {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  margin: 0;
+}
+
+.logo {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
 }
 
 .register-box {
@@ -221,28 +232,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-}
-
-.form-group.checkbox {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.form-group.checkbox input {
-  width: auto;
-  cursor: pointer;
-}
-
-.form-group.checkbox label {
-  margin-bottom: 0;
-  cursor: pointer;
-}
-
-.error-text {
-  color: #c33;
-  font-size: 0.85rem;
-  margin-top: 0.3rem;
 }
 
 .register-btn {

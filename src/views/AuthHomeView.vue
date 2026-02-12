@@ -1,13 +1,6 @@
 <template>
   <div class="auth-home">
-    <header class="header">
-      <nav class="navbar">
-        <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
-        <div class="nav-links">
-          <button class="nav-btn" @click="handleLogout">로그아웃</button>
-        </div>
-      </nav>
-    </header>
+    <AppHeader />
 
     <main class="main-content">
       <h2>환영합니다, {{ username }}님!</h2>
@@ -20,25 +13,21 @@
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue'
 import { useAuthStore } from '../stores/auth'
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 
 export default {
   name: 'AuthHomeView',
+  components: {
+    AppHeader
+  },
   setup() {
     const auth = useAuthStore()
-    const router = useRouter()
     const username = computed(() => auth.username || '회원')
 
-    const handleLogout = () => {
-      auth.logout()
-      router.push('/')
-    }
-
     return {
-      username,
-      handleLogout
+      username
     }
   }
 }

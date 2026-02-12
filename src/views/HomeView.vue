@@ -1,14 +1,6 @@
 <template>
   <div class="home-container">
-    <header class="header">
-      <nav class="navbar">
-        <h1><router-link to="/" class="logo">🎯 데이트코스</router-link></h1>
-        <div class="nav-links">
-          <router-link to="/login" class="nav-btn login-btn">로그인</router-link>
-          <router-link to="/register" class="nav-btn signup-btn">회원가입</router-link>
-        </div>
-      </nav>
-    </header>
+    <AppHeader />
 
     <section class="hero">
       <div class="hero-content">
@@ -22,21 +14,21 @@
     <section class="features">
       <h2>DateCourse의 특징</h2>
       <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🎲</div>
-          <h3>랜덤 데이트 코스</h3>
-          <p>어디로 갈지 결정 못하셨다면? 랜덤으로 설레는 데이트 코스를 추천해드립니다.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📍</div>
-          <h3>주변 정보</h3>
-          <p>추천받은 코스 주변의 맛집, 카페, 문화시설 등 다양한 정보를 한눈에 확인하세요.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">❤️</div>
-          <h3>나만의 코스</h3>
-          <p>마음에 드는 코스를 저장하고 나중에 언제든 확인할 수 있습니다.</p>
-        </div>
+        <FeatureCard
+          icon="🎲"
+          title="랜덤 데이트 코스"
+          description="어디로 갈지 결정 못하셨다면? 랜덤으로 설레는 데이트 코스를 추천해드립니다."
+        />
+        <FeatureCard
+          icon="📍"
+          title="주변 정보"
+          description="추천받은 코스 주변의 맛집, 카페, 문화시설 등 다양한 정보를 한눈에 확인하세요."
+        />
+        <FeatureCard
+          icon="❤️"
+          title="나만의 코스"
+          description="마음에 드는 코스를 저장하고 나중에 언제든 확인할 수 있습니다."
+        />
       </div>
     </section>
 
@@ -76,8 +68,15 @@
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue'
+import FeatureCard from '../components/FeatureCard.vue'
+
 export default {
-  name: 'HomeView'
+  name: 'HomeView',
+  components: {
+    AppHeader,
+    FeatureCard
+  }
 }
 </script>
 
@@ -85,17 +84,6 @@ export default {
 .home-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
-}
-
-.login-btn {
-  color: white;
-  background: transparent;
-  border: 2px solid white;
-}
-
-.login-btn:hover {
-  background: white;
-  color: #667eea;
 }
 
 .signup-btn {
@@ -186,35 +174,6 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-}
-
-.feature-card {
-  background: #f8f9fa;
-  padding: 2rem;
-  border-radius: 10px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-  color: #667eea;
-}
-
-.feature-card p {
-  color: #666;
-  line-height: 1.6;
 }
 
 .how-it-works {
